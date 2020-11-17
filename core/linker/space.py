@@ -117,11 +117,11 @@ class LossTreeSpace:
             # Generates a terminal identifier
             terminal_id = r.generate_integer_random_number(0, self.n_terminals)
 
-            # Gathers the loss based on the terminal identifier
-            loss = self._get_loss(terminal_id)
+            # # Gathers the loss based on the terminal identifier
+            # loss = self._get_loss(terminal_id)
 
             # Return the terminal node with its id and corresponding loss
-            return LossNode(str(loss), 'TERMINAL', loss)
+            return LossNode(terminal_id, 'TERMINAL', terminal_id)
 
         # Generates a node identifier
         node_id = r.generate_integer_random_number(
