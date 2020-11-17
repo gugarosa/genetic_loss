@@ -1,3 +1,5 @@
+import torch
+
 class LossNode:
     """LossNode implements a loss-based version of the tree's node.
 
@@ -298,6 +300,8 @@ def _evaluate(node, *args):
 
     """
 
+    # print(*args)
+
     # Checks if the node exists
     if node:
         # Performs a recursive pass on the left branch
@@ -312,7 +316,9 @@ def _evaluate(node, *args):
 
         # Checks if its a summation
         if node.name == 'SUM':
-            return x + y
+            # print(x.shape, y.shape)
+            # print(x, y)
+            return torch.add(x, y)
 
         # Checks if its a subtraction
         if node.name == 'SUB':

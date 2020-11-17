@@ -114,14 +114,17 @@ class LossTreeSpace:
 
         # If minimum depth equals the maximum depth
         if min_depth == max_depth:
+            #
+            terminal = l.PartialLoss()
+
             # Generates a terminal identifier
-            terminal_id = r.generate_integer_random_number(0, self.n_terminals)
+            # terminal_id = r.generate_integer_random_number(0, self.n_terminals)
 
             # # Gathers the loss based on the terminal identifier
             # loss = self._get_loss(terminal_id)
 
             # Return the terminal node with its id and corresponding loss
-            return LossNode(terminal_id, 'TERMINAL', terminal_id)
+            return LossNode(str(terminal), 'TERMINAL', terminal)
 
         # Generates a node identifier
         node_id = r.generate_integer_random_number(
@@ -129,14 +132,17 @@ class LossTreeSpace:
 
         # If the identifier is a terminal
         if node_id >= len(self.functions):
-            # Gathers its real identifier
-            terminal_id = node_id - len(self.functions)
+            #
+            terminal = l.PartialLoss()
 
-            # Gathers the loss based on the terminal identifier
-            loss = self._get_loss(terminal_id)
+            # Gathers its real identifier
+            # terminal_id = node_id - len(self.functions)
+
+            # # Gathers the loss based on the terminal identifier
+            # loss = self._get_loss(terminal_id)
 
             # Return the terminal node with its id and corresponding loss
-            return LossNode(str(loss), 'TERMINAL', loss)
+            return LossNode(str(terminal), 'TERMINAL', terminal)
 
         # Generates a new function node
         function_node = LossNode(self.functions[node_id], 'FUNCTION')

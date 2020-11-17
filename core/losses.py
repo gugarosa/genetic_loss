@@ -2,61 +2,21 @@ import torch
 from torch import nn
 
 
-class LabelLoss(nn.Module):
-    """
-    """
-
+class PartialLoss(nn.Module):
     def __init__(self):
-        """Initialization method.
+        super(PartialLoss, self).__init__()
 
-        """
-
-        # Overrides the parent class
-        super(LabelLoss, self).__init__()
+        self.id = torch.round(torch.rand(1))
 
     def __str__(self):
-        """String representation.
+        if self.id == 0:
+            return 'y'
+        elif self.id == 1:
+            return 'y_pred'
 
-        """
-
-        return 'y'
-
-    def forward(self, y):
-        """Forward pass.
-
-        Args:
-            y (torch.Tensor): True labels.
-
-        """
-        
-        return y
-
-    
-class PredLoss(nn.Module):
-    """
-    """
-
-    def __init__(self):
-        """Initialization method.
-
-        """
-
-        # Overrides the parent class
-        super(PredLoss, self).__init__()
-
-    def __str__(self):
-        """String representation.
-
-        """
-
-        return 'y_pred'
-
-    def forward(self, y_pred):
-        """Forward pass.
-
-        Args:
-            y_pred (torch.Tensor): Predictions.
-
-        """
-        
-        return y_pred
+    def forward(self, y, y_pred):
+        # print(y.requires_grad, y_pred.requires_grad)
+        if self.id == 0:
+            return torch.nn.functional.softmax(y, dim=0).gather(1, y_pred.unsqueeze(1))
+        elif self.id == 1:
+            return y_pred

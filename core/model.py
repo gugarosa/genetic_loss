@@ -76,6 +76,8 @@ class Model(torch.nn.Module):
         # Calculates the batch's loss
         batch_loss = self.loss.evaluate(preds, y)
 
+        batch_loss = torch.sum(batch_loss)
+
         # Checks if it is a training batch
         if is_training:
             # Propagates the gradients backward

@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     # Running the optimization task
     history = w.run(opt_fn, n_trees=n_agents, n_terminals=2, n_iterations=n_iterations,
-                    min_depth=min_depth, max_depth=max_depth, functions=['SUM', 'SUB', 'MUL', 'DIV'])
+                    min_depth=min_depth, max_depth=max_depth, functions=['SUM'])
 
     # Saving optimization history
     history.save(f'outputs/{dataset}_{seed}.pkl')
