@@ -326,7 +326,8 @@ def _evaluate(node, *args):
 
         # Checks if its a multiplication
         if node.name == 'MUL':
-            return x * y
+            # print(x.shape, y.shape)
+            return torch.mul(x, y)
 
         # Checks if its a division
         if node.name == 'DIV':

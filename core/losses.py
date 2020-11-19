@@ -10,13 +10,14 @@ class PartialLoss(nn.Module):
 
     def __str__(self):
         if self.id == 0:
+            return 'preds'
+        elif self.id == 1:
             return 'y'
-        elif self.id == 1:
-            return 'y_pred'
 
-    def forward(self, y, y_pred):
-        # print(y.requires_grad, y_pred.requires_grad)
+    def forward(self, preds, y):
+        # print(y.requires_grad, preds.requires_grad)
         if self.id == 0:
-            return torch.nn.functional.softmax(y, dim=0).gather(1, y_pred.unsqueeze(1))
+            # return torch.nn.functional.softmax(y, dim=0).gather(1, preds.unsqueeze(1))
+            return nn.LogSoftmax()(preds)
         elif self.id == 1:
-            return y_pred
+            return torch.nn.functional.one_hot(y)
