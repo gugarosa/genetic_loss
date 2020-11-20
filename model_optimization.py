@@ -91,7 +91,7 @@ if __name__ == '__main__':
     opt_fn = t.validate_losses(train_iterator, val_iterator, model, n_input, n_hidden, n_classes, lr, epochs, device)
 
     # Running the optimization task
-    history = w.run(opt_fn, n_trees=n_agents, n_terminals=2, n_iterations=n_iterations,
+    history = w.run(opt_fn, n_trees=n_agents, n_terminals=3, n_iterations=n_iterations,
                     min_depth=min_depth, max_depth=max_depth, functions=['MUL'])
 
     # Saving optimization history

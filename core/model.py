@@ -78,7 +78,7 @@ class Model(torch.nn.Module):
 
         batch_loss2 = torch.nn.CrossEntropyLoss()(preds, y)
 
-        print(batch_loss, batch_loss2)
+        # print(batch_loss, batch_loss2)
 
         # Checks if it is a training batch
         if is_training:

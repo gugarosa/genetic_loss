@@ -4,7 +4,7 @@ import opytimizer.math.random as r
 import opytimizer.utils.constants as c
 from opytimizer.core.space import Space
 
-import core.losses as l
+from core.linker.terminal import Terminal
 from core.linker.node import LossNode
 
 
@@ -75,27 +75,6 @@ class LossTreeSpace:
         # Applies the first tree as the best one
         self.best_tree = copy.deepcopy(self.trees[0])
 
-    def _get_loss(self, terminal):
-        """Gets a loss function based on an identifier.
-
-        Args:
-            terminal (int): Identifier of the loss function.
-
-        Returns:
-            A loss function.
-
-        """
-
-        # If terminal equals to `0`
-        if terminal == 0:
-            # Returns the CrossEntropyLoss
-            return l.LabelLoss()
-
-        # If terminal equal to `1`
-        if terminal == 1:
-            # Returns a ConstantLoss value
-            return l.PredLoss()
-
     def grow(self, min_depth=1, max_depth=3):
         """It creates a random tree based on the GROW algorithm.
 
@@ -115,7 +94,7 @@ class LossTreeSpace:
         # If minimum depth equals the maximum depth
         if min_depth == max_depth:
             #
-            terminal = l.PartialLoss()
+            terminal = Terminal()
 
             # Generates a terminal identifier
             # terminal_id = r.generate_integer_random_number(0, self.n_terminals)
@@ -133,7 +112,7 @@ class LossTreeSpace:
         # If the identifier is a terminal
         if node_id >= len(self.functions):
             #
-            terminal = l.PartialLoss()
+            terminal = Terminal()
 
             # Gathers its real identifier
             # terminal_id = node_id - len(self.functions)
