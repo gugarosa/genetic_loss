@@ -18,7 +18,7 @@ def get_arguments():
     """
 
     # Creates the ArgumentParser
-    parser = argparse.ArgumentParser(usage='Optimizes a Machine Learning model with GP-based losses.')
+    parser = argparse.ArgumentParser(usage='Finds an optimized loss using Genetic Programming.')
 
     parser.add_argument('dataset', help='Dataset identifier', choices=['mnist', 'fmnist', 'kmnist'])
 

@@ -44,7 +44,7 @@ class Terminal(nn.Module):
 
         Args:
             preds (torch.Tensor): Predictions.
-            y_true (torch.Tensor): True labels.
+            y (torch.Tensor): True labels.
 
         Returns:
             The parameter based on the pre-initialized identifier.
@@ -53,7 +53,6 @@ class Terminal(nn.Module):
 
         # If it is the first identifier
         if self.id == 0:
-            # return torch.nn.functional.softmax(y, dim=0).gather(1, preds.unsqueeze(1))
             return nn.LogSoftmax()(preds)
 
         # If it is the second identifier

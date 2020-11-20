@@ -4,8 +4,8 @@ import opytimizer.math.random as r
 import opytimizer.utils.constants as c
 from opytimizer.core.space import Space
 
-from core.linker.terminal import Terminal
 from core.linker.node import LossNode
+from core.linker.terminal import Terminal
 
 
 class LossTreeSpace:
@@ -93,14 +93,8 @@ class LossTreeSpace:
 
         # If minimum depth equals the maximum depth
         if min_depth == max_depth:
-            #
+            # Creates a terminal-based instance
             terminal = Terminal()
-
-            # Generates a terminal identifier
-            # terminal_id = r.generate_integer_random_number(0, self.n_terminals)
-
-            # # Gathers the loss based on the terminal identifier
-            # loss = self._get_loss(terminal_id)
 
             # Return the terminal node with its id and corresponding loss
             return LossNode(str(terminal), 'TERMINAL', terminal)
@@ -111,14 +105,8 @@ class LossTreeSpace:
 
         # If the identifier is a terminal
         if node_id >= len(self.functions):
-            #
+            # Creates a terminal-based instance
             terminal = Terminal()
-
-            # Gathers its real identifier
-            # terminal_id = node_id - len(self.functions)
-
-            # # Gathers the loss based on the terminal identifier
-            # loss = self._get_loss(terminal_id)
 
             # Return the terminal node with its id and corresponding loss
             return LossNode(str(terminal), 'TERMINAL', terminal)

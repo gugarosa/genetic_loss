@@ -1,5 +1,6 @@
 import torch
 
+
 class LossNode:
     """LossNode implements a loss-based version of the tree's node.
 
