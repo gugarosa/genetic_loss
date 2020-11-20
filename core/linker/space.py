@@ -8,12 +8,36 @@ from core.linker.node import LossNode
 from core.linker.terminal import Terminal
 
 
+# When using Genetic Programming, each function node needs an unique number of arguments,
+# which is defined by this dictionary
+N_ARGS_FUNCTION = {
+    'SUM': 2,
+    'SUB': 2,
+    'MUL': 2,
+    'DIV': 2,
+    'ABS': 1,
+    'SQRT': 1,
+    'EXP': 1,
+    'LOG': 1,
+    'COS': 1,
+    'SIN': 1,
+    'TAN': 1,
+    'RELU': 1,
+    'SIGMOID': 1,
+    'SOFTPLUS': 1,
+    'SOFTMAX': 1,
+    'TANH': 1,
+    'LOG_SIGMOID': 1,
+    'LOG_SOFTMAX': 1
+}
+
+
 class LossTreeSpace:
     """LossTreeSpace implements a loss-based version of the tree search space.
 
     """
 
-    def __init__(self, n_trees=1, n_terminals=1, n_iterations=10,
+    def __init__(self, n_trees=1, n_terminals=1, n_iterations=10, n_classes=10,
                  min_depth=1, max_depth=3, functions=None):
         """Initialization method.
 
@@ -21,6 +45,7 @@ class LossTreeSpace:
             n_trees (int): Number of trees.
             n_terminals (int): Number of terminal nodes.
             n_iterations (int): Number of iterations.
+            n_classes (int): Number of classes.
             min_depth (int): Minimum depth of the trees.
             max_depth (int): Maximum depth of the trees.
             functions (list): Functions nodes.
@@ -41,6 +66,9 @@ class LossTreeSpace:
 
         # Number of iterations
         self.n_iterations = n_iterations
+
+        # Number of classes
+        self.n_classes = n_classes
 
         # Minimum depth of the trees
         self.min_depth = min_depth
@@ -75,6 +103,26 @@ class LossTreeSpace:
         # Applies the first tree as the best one
         self.best_tree = copy.deepcopy(self.trees[0])
 
+        # mul = LossNode('MUL', 'FUNCTION')
+        # log_softmax = LossNode('LOG_SOFTMAX', 'FUNCTION')
+
+        # preds = Terminal(n_classes=self.n_classes)
+        # preds.id = 0
+        # node_preds = LossNode(str(preds), 'TERMINAL', preds)
+
+        # y = Terminal(n_classes=self.n_classes)
+        # y.id = 1
+        # node_y = LossNode(str(y), 'TERMINAL', y)
+        
+        # mul.left = log_softmax
+        # mul.right = node_y
+        # log_softmax.left = node_preds
+        # node_preds.parent = log_softmax
+        # node_y.parent = mul
+        
+
+        # self.trees[0] = mul
+
     def grow(self, min_depth=1, max_depth=3):
         """It creates a random tree based on the GROW algorithm.
 
@@ -94,7 +142,7 @@ class LossTreeSpace:
         # If minimum depth equals the maximum depth
         if min_depth == max_depth:
             # Creates a terminal-based instance
-            terminal = Terminal()
+            terminal = Terminal(n_classes=self.n_classes)
 
             # Return the terminal node with its id and corresponding loss
             return LossNode(str(terminal), 'TERMINAL', terminal)
@@ -106,7 +154,7 @@ class LossTreeSpace:
         # If the identifier is a terminal
         if node_id >= len(self.functions):
             # Creates a terminal-based instance
-            terminal = Terminal()
+            terminal = Terminal(n_classes=self.n_classes)
 
             # Return the terminal node with its id and corresponding loss
             return LossNode(str(terminal), 'TERMINAL', terminal)
@@ -115,7 +163,7 @@ class LossTreeSpace:
         function_node = LossNode(self.functions[node_id], 'FUNCTION')
 
         # For every possible function argument
-        for i in range(c.N_ARGS_FUNCTION[self.functions[node_id]]):
+        for i in range(N_ARGS_FUNCTION[self.functions[node_id]]):
             # Calls recursively the grow function and creates a temporary node
             node = self.grow(min_depth + 1, max_depth)
 

@@ -46,7 +46,7 @@ def get_arguments():
 
     parser.add_argument('-device', help='CPU or GPU usage', choices=['cpu', 'cuda'])
 
-    parser.add_argument('-seed', help='Seed identifier', type=int, default=0)
+    parser.add_argument('-seed', help='Seed identifier', type=int, default=2)
 
     parser.add_argument('--shuffle', help='Whether data should be shuffled or not', action='store_true')
 
@@ -91,8 +91,8 @@ if __name__ == '__main__':
     opt_fn = t.validate_losses(train_iterator, val_iterator, model, n_input, n_hidden, n_classes, lr, epochs, device)
 
     # Running the optimization task
-    history = w.run(opt_fn, n_trees=n_agents, n_terminals=3, n_iterations=n_iterations,
-                    min_depth=min_depth, max_depth=max_depth, functions=['MUL'])
+    history = w.run(opt_fn, n_trees=n_agents, n_terminals=3, n_iterations=n_iterations, n_classes=n_classes,
+                    min_depth=min_depth, max_depth=max_depth, functions=['MUL', 'LOG_SOFTMAX'])
 
     # Saving optimization history
     history.save(f'outputs/{dataset}_{seed}.pkl')

@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 
 
 class LossNode:
@@ -317,46 +318,75 @@ def _evaluate(node, *args):
 
         # Checks if its a summation
         if node.name == 'SUM':
-            # print(x.shape, y.shape)
-            # print(x, y)
             return torch.add(x, y)
 
         # Checks if its a subtraction
         if node.name == 'SUB':
-            return x - y
+            return torch.sub(x, y)
 
         # Checks if its a multiplication
         if node.name == 'MUL':
-            # print(x.shape, y.shape)
             return torch.mul(x, y)
 
         # Checks if its a division
         if node.name == 'DIV':
-            return x / (y + 1e-32)
-
-        # Checks if its an exponential
-        if node.name == 'EXP':
-            return np.exp(x)
-
-        # Checks if its a square root
-        if node.name == 'SQRT':
-            return np.sqrt(np.abs(x))
-
-        # Checks if its a logarithm
-        if node.name == 'LOG':
-            return np.log(np.abs(x) + 1e-32)
+            return torch.div(x, y)
 
         # Checks if its an absolute value
         if node.name == 'ABS':
-            return np.abs(x)
+            return torch.abs(x)
 
-        # Checks if its a sine value
-        if node.name == 'SIN':
-            return np.sin(x)
+        # Checks if its a square root
+        if node.name == 'SQRT':
+            return torch.sqrt(x)
+
+        # Checks if its an exponential
+        if node.name == 'EXP':
+            return torch.exp(x)
+
+        # Checks if its a logarithm
+        if node.name == 'LOG':
+            return torch.log(x)
 
         # Checks if its a cosine value
         if node.name == 'COS':
-            return np.cos(x)
+            return torch.cos(x)
+
+        # Checks if its a sine value
+        if node.name == 'SIN':
+            return torch.sin(x)
+
+        # Checks if its a tangent value
+        if node.name == 'TAN':
+            return torch.tan(x)
+
+        # Checks if its a ReLU value
+        if node.name == 'RELU':
+            return F.relu(x)
+
+        # Checks if its a sigmoid value
+        if node.name == 'SIGMOID':
+            return F.sigmoid(x)
+
+        # Checks if its a softplus value
+        if node.name == 'SOFTPLUS':
+            return F.softplus(x)
+
+        # Checks if its a softmax value
+        if node.name == 'SOFTMAX':
+            return F.softmax(x)
+
+        # Checks if its an hyperbolic tangent value
+        if node.name == 'TANH':
+            return F.tanh(x)
+
+        # Checks if its a log-sigmoid value
+        if node.name == 'LOG_SIGMOID':
+            return F.logsigmoid(x)
+
+        # Checks if its a log-softmax value
+        if node.name == 'LOG_SOFTMAX':
+            return F.log_softmax(x, dim=-1)
 
     # If the node does not exists
     else:

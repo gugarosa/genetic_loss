@@ -7,13 +7,19 @@ class Terminal(nn.Module):
 
     """
 
-    def __init__(self):
+    def __init__(self, n_classes=10):
         """Initialization method.
+
+        Args:
+            n_classes (int): Number of classes.
 
         """
 
         # Overrides the parent class
         super(Terminal, self).__init__()
+
+        # Defines the number of classes for compatibility with one-hot encoding
+        self.n_classes = n_classes
 
         # Defines an identifier for further selection
         # It ranges between 0, 1 and 2
@@ -53,11 +59,11 @@ class Terminal(nn.Module):
 
         # If it is the first identifier
         if self.id == 0:
-            return nn.LogSoftmax()(preds)
+            return preds
 
         # If it is the second identifier
         elif self.id == 1:
-            return torch.tensor(torch.nn.functional.one_hot(y).float(), requires_grad=True)
+            return torch.nn.functional.one_hot(y, num_classes=self.n_classes).float().requires_grad_(True)
 
         # If it is the third identifier
         elif self.id == 2:
