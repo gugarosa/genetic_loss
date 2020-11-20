@@ -103,26 +103,6 @@ class LossTreeSpace:
         # Applies the first tree as the best one
         self.best_tree = copy.deepcopy(self.trees[0])
 
-        # mul = LossNode('MUL', 'FUNCTION')
-        # log_softmax = LossNode('LOG_SOFTMAX', 'FUNCTION')
-
-        # preds = Terminal(n_classes=self.n_classes)
-        # preds.id = 0
-        # node_preds = LossNode(str(preds), 'TERMINAL', preds)
-
-        # y = Terminal(n_classes=self.n_classes)
-        # y.id = 1
-        # node_y = LossNode(str(y), 'TERMINAL', y)
-        
-        # mul.left = log_softmax
-        # mul.right = node_y
-        # log_softmax.left = node_preds
-        # node_preds.parent = log_softmax
-        # node_y.parent = mul
-        
-
-        # self.trees[0] = mul
-
     def grow(self, min_depth=1, max_depth=3):
         """It creates a random tree based on the GROW algorithm.
 

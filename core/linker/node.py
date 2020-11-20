@@ -366,7 +366,7 @@ def _evaluate(node, *args):
 
         # Checks if its a sigmoid value
         if node.name == 'SIGMOID':
-            return F.sigmoid(x)
+            return torch.sigmoid(x)
 
         # Checks if its a softplus value
         if node.name == 'SOFTPLUS':
