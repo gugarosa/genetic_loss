@@ -58,7 +58,7 @@ class Terminal(nn.Module):
 
         # If it is the second identifier
         elif self.id == 1:
-            return torch.nn.functional.one_hot(y).float()
+            return torch.tensor(torch.nn.functional.one_hot(y).float(), requires_grad=True)
 
         # If it is the third identifier
         elif self.id == 2:

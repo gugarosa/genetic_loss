@@ -34,7 +34,7 @@ def get_arguments():
 
     parser.add_argument('-lr', help='Learning rate', type=float, default=0.001)
 
-    parser.add_argument('-epochs', help='Number of training epochs', type=int, default=3)
+    parser.add_argument('-epochs', help='Number of training epochs', type=int, default=1)
 
     parser.add_argument('-n_agents', help='Number of meta-heuristic agents', type=int, default=5)
 

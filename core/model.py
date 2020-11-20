@@ -76,10 +76,6 @@ class Model(torch.nn.Module):
         # Calculates the batch's loss
         batch_loss = torch.mean(-self.loss.evaluate(preds, y))
 
-        batch_loss2 = torch.nn.CrossEntropyLoss()(preds, y)
-
-        # print(batch_loss, batch_loss2)
-
         # Checks if it is a training batch
         if is_training:
             # Propagates the gradients backward

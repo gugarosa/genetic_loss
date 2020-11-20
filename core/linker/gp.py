@@ -84,12 +84,12 @@ class LossGP(GP):
                 # Prunes the amount of maximum nodes
                 max_nodes = self._prune_nodes(n_nodes)
 
-                # Mutatets the individual
+                # Mutates the individual
                 space.trees[s] = self._mutate(space, space.trees[s], max_nodes)
 
             # If there is only one node
             else:
-                # Re-create it with a random tree
+                # Re-creates it with a random tree
                 space.trees[s] = space.grow(space.min_depth, space.max_depth)
 
     def _crossover(self, space):
