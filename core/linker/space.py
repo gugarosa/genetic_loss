@@ -38,7 +38,7 @@ class LossTreeSpace:
     """
 
     def __init__(self, n_trees=1, n_terminals=1, n_iterations=10, n_classes=10,
-                 min_depth=1, max_depth=3, functions=None):
+                 min_depth=1, max_depth=3, functions=None, init_loss_prob=0.0):
         """Initialization method.
 
         Args:
@@ -49,6 +49,7 @@ class LossTreeSpace:
             min_depth (int): Minimum depth of the trees.
             max_depth (int): Maximum depth of the trees.
             functions (list): Functions nodes.
+            init_loss_prob (float): Probability of trees instanciated with standard losses.
 
         """
 
@@ -79,11 +80,59 @@ class LossTreeSpace:
         # List of functions nodes
         self.functions = functions
 
+        # Probability of trees that should use initial standard losses
+        self.init_loss_prob = init_loss_prob
+
         # Creating the trees
         self._create_trees()
 
         # Defining flag for later use
         self.built = True
+
+    def _replace_with_standard_loss(self, trees):
+        """Replaces a set of trees with standard loss functions.
+
+        Args:
+            trees (list): List of trees to be replaced.
+
+        Returns:
+            List of trees that were replaced.
+
+        """
+
+        # Creates a set of terminals
+        t1 = Terminal(self.n_classes)
+        t2 = Terminal(self.n_classes)
+
+        # Replaces their identifiers
+        t1.id = 0
+        t2.id = 1
+
+        # Creates nodes based on the terminals
+        preds = LossNode(str(t1), 'TERMINAL', t1)
+        y = LossNode(str(t2), 'TERMINAL', t2)
+
+        # Creates a set of function nodes
+        log_softmax = LossNode('LOG_SOFTMAX', 'FUNCTION')
+        mul = LossNode('MUL', 'FUNCTION')
+
+        # Creates the Cross Entropy tree
+        preds.parent = log_softmax
+        log_softmax.left = preds
+        log_softmax.parent = mul
+        y.parent = mul
+        mul.left = log_softmax
+        mul.right = y
+
+        # Calculates the number of trees to be replaced
+        n_replacement_trees = int(self.init_loss_prob * self.n_trees)
+
+        # Iterates over every replacement tree
+        for i in range(n_replacement_trees):
+            # Makes a deepcopy over the cross entropy loss function
+            trees[i] = copy.deepcopy(mul)
+
+        return trees
 
     def _create_trees(self):
         """Creates a list of random trees using `GROW` algorithm.
@@ -97,8 +146,11 @@ class LossTreeSpace:
         """
 
         # Creates a list of random trees
-        self.trees = [self.grow(self.min_depth, self.max_depth)
+        trees = [self.grow(self.min_depth, self.max_depth)
                       for _ in range(self.n_trees)]
+
+        # Replaces a set of trees with standard loss functions
+        self.trees = self._replace_with_standard_loss(trees)
 
         # Applies the first tree as the best one
         self.best_tree = copy.deepcopy(self.trees[0])

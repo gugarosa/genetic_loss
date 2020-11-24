@@ -6,7 +6,7 @@ from core.linker.space import LossTreeSpace
 
 
 def run(target, n_trees, n_terminals, n_iterations, n_classes,
-        min_depth, max_depth, functions, hyperparams=None):
+        min_depth, max_depth, functions, init_loss_prob, hyperparams=None):
     """Abstracts Opytimizer's loss-based Genetic Programming into a single method.
 
     Args:
@@ -18,6 +18,7 @@ def run(target, n_trees, n_terminals, n_iterations, n_classes,
         min_depth (int): Minimum depth of trees.
         max_depth (int): Maximum depth of trees.
         functions (list): Functions' nodes.
+        init_loss_prob (float): Probability of trees instanciated with standard losses.
         hyperparams (dict): Dictionary of hyperparameters.
 
     Returns:
@@ -27,7 +28,8 @@ def run(target, n_trees, n_terminals, n_iterations, n_classes,
 
     # Creating a loss-based TreeSpace
     space = LossTreeSpace(n_trees=n_trees, n_terminals=n_terminals, n_iterations=n_iterations,
-                          n_classes=n_classes, min_depth=min_depth, max_depth=max_depth, functions=functions)
+                          n_classes=n_classes, min_depth=min_depth, max_depth=max_depth,
+                          init_loss_prob=init_loss_prob, functions=functions)
 
     # Creating a loss-based GP optimizer
     optimizer = LossGP(hyperparams=hyperparams)

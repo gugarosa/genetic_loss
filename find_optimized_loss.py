@@ -44,6 +44,8 @@ def get_arguments():
 
     parser.add_argument('-max_depth', help='Maximum depth of trees', type=int, default=5)
 
+    parser.add_argument('-init_loss_prob', help='Probability of initial standard losses', type=float, default=0.0)
+
     parser.add_argument('-device', help='CPU or GPU usage', choices=['cpu', 'cuda'])
 
     parser.add_argument('-seed', help='Seed identifier', type=int, default=0)
@@ -70,6 +72,7 @@ if __name__ == '__main__':
     n_iterations = args.n_iter
     min_depth = args.min_depth
     max_depth = args.max_depth
+    init_loss_prob = args.init_loss_prob
     device = args.device
     seed = args.seed
     shuffle = args.shuffle
@@ -92,7 +95,8 @@ if __name__ == '__main__':
 
     # Running the optimization task
     history = w.run(opt_fn, n_trees=n_agents, n_terminals=3, n_iterations=n_iterations, n_classes=n_classes,
-                    min_depth=min_depth, max_depth=max_depth, functions=['MUL', 'LOG_SOFTMAX'])
+                    min_depth=min_depth, max_depth=max_depth, functions=['MUL', 'LOG_SOFTMAX'],
+                    init_loss_prob=init_loss_prob)
 
     # Saving optimization history
     history.save(f'{dataset}_{seed}_optimized.pkl')
