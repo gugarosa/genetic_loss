@@ -1,6 +1,6 @@
-# Programmatically Evolving Losses in Machine Learning
+# Genetic Programming Operators into Artificial Machine Learning Losses
 
-*This repository holds all the necessary code to run the very-same experiments described in the paper "Programmatically Evolving Losses in Machine Learning".*
+*This repository holds all the necessary code to run the very-same experiments described in the paper "Genetic Programming Operators into Artificial Machine Learning Losses".*
 
 ---
 
