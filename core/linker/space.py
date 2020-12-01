@@ -7,7 +7,6 @@ from opytimizer.core.space import Space
 from core.linker.node import LossNode
 from core.linker.terminal import Terminal
 
-
 # When using Genetic Programming, each function node needs an unique number of arguments,
 # which is defined by this dictionary
 N_ARGS_FUNCTION = {

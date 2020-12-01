@@ -1,5 +1,6 @@
 # Additional files
 **/*.DS_Store
+*.pkl
 *.log
 *.log.*
 .vscode

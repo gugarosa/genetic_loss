@@ -1,6 +1,7 @@
 import argparse
 
 import torch
+from opytimizer.utils.history import History
 from torch.utils.data import DataLoader
 
 import utils.loader as l
@@ -18,13 +19,13 @@ def get_arguments():
     """
 
     # Creates the ArgumentParser
-    parser = argparse.ArgumentParser(usage='Finds an optimized loss using Genetic Programming.')
+    parser = argparse.ArgumentParser(usage='Evaluates an optimized loss.')
 
     parser.add_argument('dataset', help='Dataset identifier', choices=['mnist', 'fmnist', 'kmnist'])
 
     parser.add_argument('model', help='Model identifier', choices=['mlp', 'resnet'])
 
-    parser.add_argument('output_file', help='Output history file .pkl identifier', type=str)
+    parser.add_argument('input_file', help='Input history file .pkl identifier', type=str)
 
     parser.add_argument('-batch_size', help='Batch size', type=int, default=128)
 
@@ -37,16 +38,6 @@ def get_arguments():
     parser.add_argument('-lr', help='Learning rate', type=float, default=0.001)
 
     parser.add_argument('-epochs', help='Number of training epochs', type=int, default=1)
-
-    parser.add_argument('-n_agents', help='Number of meta-heuristic agents', type=int, default=5)
-
-    parser.add_argument('-n_iter', help='Number of meta-heuristic iterations', type=int, default=10)
-
-    parser.add_argument('-min_depth', help='Minimum depth of trees', type=int, default=1)
-
-    parser.add_argument('-max_depth', help='Maximum depth of trees', type=int, default=5)
-
-    parser.add_argument('-init_loss_prob', help='Probability of initial standard losses', type=float, default=0.0)
 
     parser.add_argument('-device', help='CPU or GPU usage', choices=['cpu', 'cuda'])
 
@@ -63,7 +54,7 @@ if __name__ == '__main__':
 
     # Common arguments
     dataset = args.dataset
-    output_file = args.output_file
+    input_file = args.input_file
     seed = args.seed
     shuffle = args.shuffle
 
@@ -76,34 +67,33 @@ if __name__ == '__main__':
     epochs = args.epochs
     lr = args.lr
     device = args.device
-
-    # Optimization arguments
-    n_agents = args.n_agents
-    n_iterations = args.n_iter
-    min_depth = args.min_depth
-    max_depth = args.max_depth
-    init_loss_prob = args.init_loss_prob
+    
+    # Loads the optimization history
+    h = History()
+    h.load(input_file)
 
     # Loads the data
-    train, val, _ = l.load_dataset(name=dataset, seed=seed)
+    train, _, test = l.load_dataset(name=dataset, seed=seed)
 
     # Creates the iterators
     train_iterator = DataLoader(train, batch_size=batch_size, shuffle=shuffle)
-    val_iterator = DataLoader(val, batch_size=batch_size, shuffle=shuffle)
+    test_iterator = DataLoader(test, batch_size=batch_size, shuffle=shuffle)
 
     # Defining the torch seed
     torch.manual_seed(seed)
 
     # Gathers the model object
-    model = o.get_model(name).obj
+    model_obj = o.get_model(name).obj
+    model = model_obj(n_input=n_input, n_hidden=n_hidden, n_classes=n_classes,
+                      lr=lr, init_weights=None, device=device)
 
-    # Defining the optimization task
-    opt_fn = t.validate_losses(train_iterator, val_iterator, model, n_input, n_hidden, n_classes, lr, epochs, device)
+    # Gathers the loss function
+    model.loss = h.best_tree[-1]
 
-    # Running the optimization task
-    history = w.run(opt_fn, n_trees=n_agents, n_terminals=3, n_iterations=n_iterations, n_classes=n_classes,
-                    min_depth=min_depth, max_depth=max_depth, functions=['MUL', 'LOG_SOFTMAX'],
-                    init_loss_prob=init_loss_prob)
+    # Fits the model
+    model.fit(train_iterator, epochs)
 
-    # Saving optimization history
-    history.save(output_file)
+    # Evaluates the model
+    _, acc = model.evaluate(test_iterator)
+
+    print(acc)
