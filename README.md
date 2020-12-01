@@ -62,7 +62,7 @@ python find_optimized_loss.py -h
 
 *Note that `-h` invokes the script helper, which assists users in employing the appropriate parameters.*
 
-### Evaluating Optimized Loss Function
+### Evaluating Optimized Losses
 
 After conducting the optimization task, one needs to evaluate the created loss function using training and testing sets. Please, use the following script to accomplish such a procedure:
 
